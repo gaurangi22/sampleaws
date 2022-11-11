@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    env: dev
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+      env: dev
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+        env: dev
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:13.1-alpine
+        ports:
+          - containerPort: 5432
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: compose-postgres
+                key: compose-postgres
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: compose-postgres
+                key: compose-postgres
+                
