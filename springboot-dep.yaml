@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-postgres
+  labels:
+    env: dev
+spec:
+  selector:
+    matchLabels:
+      app: springboot-postgres
+      env: dev
+  replicas: 1
+  template:
+    metadata:
+      name: springboot-postgres
+      labels:
+        app: springboot-postgres
+        env: dev
+    spec:
+      containers:
+      - name: springboot-postgres
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: compose-postgres
+                key: compose-postgres
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: compose-postgres
+                key: compose-postgres
+          - name: POSTGRES_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: hostname-config
+                key: postgres_host                
